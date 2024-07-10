@@ -15,7 +15,12 @@ plugins {
 }
 
 repositories {
-	mavenCentral(); gradlePluginPortal()
+	
+	maven { 
+		    url "http://nexus.kw01/repository/mvn-repos/" 
+		    allowInsecureProtocol true	
+		  }
+    //mavenCentral(); gradlePluginPortal()
 }
 
 group = 'io.dough'
