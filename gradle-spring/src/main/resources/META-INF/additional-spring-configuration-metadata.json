@@ -1,0 +1,19 @@
+{
+	"properties": [
+		{
+			"name": "base.jackson.date-format",
+			"type": "java.lang.String",
+			"description": "Description for base.jackson.date-format."
+		},
+		{
+			"name": "base.jackson.zone-id",
+			"type": "java.time.ZoneId",
+			"description": "Description for base.jackson.zone-id."
+		},
+		{
+			"name": "base.springdoc-swagger-enabled",
+			"type": "java.lang.Boolean",
+			"description": "Description for base.springdoc-swagger-enabled."
+		}
+	]
+}
