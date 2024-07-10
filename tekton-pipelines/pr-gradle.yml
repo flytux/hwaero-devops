@@ -1,0 +1,31 @@
+apiVersion: tekton.dev/v1beta1
+kind: PipelineRun
+metadata:
+  generateName: gradle-pipeline-
+spec:
+  serviceAccountName: sa-pipeline-runner
+  pipelineRef:
+    name: build-gradle-jib
+  params:
+  - name: build-stage
+    value: dev
+  - name: git-repo-name
+    value: gradle-spring-boot
+  - name: git-branch
+    value: master
+  - name: insecure-registry
+    value: "true"
+  - name: git-url
+    value: "http://gitea.gitea:3000/tekton"
+  - name: image-url
+    value: "docker.kw01"
+  - name: gitops-repo-name
+    value: kw-mvn-deploy
+  - name: gitops-branch
+    value: kust
+  workspaces:
+  - name: source
+    persistentvolumeclaim:
+      claimName: pvc-build
+  - name: gitops
+    emptyDir: {}
