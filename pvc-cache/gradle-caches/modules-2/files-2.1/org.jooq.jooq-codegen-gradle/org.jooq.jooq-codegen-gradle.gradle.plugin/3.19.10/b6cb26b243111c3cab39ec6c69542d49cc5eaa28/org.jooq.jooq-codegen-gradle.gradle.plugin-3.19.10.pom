@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.jooq.jooq-codegen-gradle</groupId>
+  <artifactId>org.jooq.jooq-codegen-gradle.gradle.plugin</artifactId>
+  <version>3.19.10</version>
+  <packaging>pom</packaging>
+  <name>jooq-codegen-gradle</name>
+  <description>jOOQ code generation plugin for Gradle</description>
+
+  <url>https://jooq.org</url>
+  <licenses>
+    <license>
+      <name>Apache License, Version 2.0</name>
+      <url>http://www.jooq.org/inc/LICENSE.txt</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+  <scm>
+    <developerConnection>https://github.com/jOOQ/jOOQ.git</developerConnection>
+    <url>https://github.com/jOOQ/jOOQ.git</url>
+    <connection>git://github.com/jOOQ/jOOQ.git</connection>
+  </scm>
+  <developers>
+    <developer>
+      <name>Data Geekery</name>
+      <email>contact@datageekery.com</email>
+    </developer>
+  </developers>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.jooq</groupId>
+      <artifactId>jooq-codegen-gradle</artifactId>
+      <version>3.19.10</version>
+    </dependency>
+  </dependencies>
+</project>

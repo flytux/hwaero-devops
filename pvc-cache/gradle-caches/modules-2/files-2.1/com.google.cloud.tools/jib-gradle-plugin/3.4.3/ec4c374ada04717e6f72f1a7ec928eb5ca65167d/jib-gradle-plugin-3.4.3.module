@@ -1,0 +1,185 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "group": "com.google.cloud.tools",
+    "module": "jib-gradle-plugin",
+    "version": "3.4.3",
+    "attributes": {
+      "org.gradle.status": "release"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "6.9.2",
+      "buildId": "oxlagbluyfh2nmxk7ev2tzckpy"
+    }
+  },
+  "variants": [
+    {
+      "name": "apiElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 8,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-api"
+      },
+      "files": [
+        {
+          "name": "jib-gradle-plugin-3.4.3.jar",
+          "url": "jib-gradle-plugin-3.4.3.jar",
+          "size": 559718,
+          "sha512": "5885790821656a8ab72210adfab9886787e342549396e0470da9ab9b43f02a35148b398969ae8c0af5d2e3642c1070839146f2f141b1e0ce38ec2482ddb02e68",
+          "sha256": "0c5086578e13980186bbf75e1884edef636136208ecf1ded0b023a543c797209",
+          "sha1": "7d843d4cc054459f1044705dbdf0617c0cf9fc3e",
+          "md5": "0e48a676c2d3cfa400c2613f27e6f578"
+        }
+      ]
+    },
+    {
+      "name": "runtimeElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 8,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-runtime"
+      },
+      "dependencies": [
+        {
+          "group": "com.google.http-client",
+          "module": "google-http-client",
+          "version": {
+            "requires": "1.42.2"
+          }
+        },
+        {
+          "group": "com.google.http-client",
+          "module": "google-http-client-apache-v2",
+          "version": {
+            "requires": "1.42.2"
+          }
+        },
+        {
+          "group": "com.google.auth",
+          "module": "google-auth-library-oauth2-http",
+          "version": {
+            "requires": "1.10.0"
+          }
+        },
+        {
+          "group": "org.apache.commons",
+          "module": "commons-compress",
+          "version": {
+            "requires": "1.26.0"
+          }
+        },
+        {
+          "group": "com.google.guava",
+          "module": "guava",
+          "version": {
+            "requires": "32.1.2-jre"
+          }
+        },
+        {
+          "group": "com.fasterxml.jackson",
+          "module": "jackson-bom",
+          "version": {
+            "requires": "2.15.2"
+          },
+          "attributes": {
+            "org.gradle.category": "platform"
+          },
+          "endorseStrictVersions": true
+        },
+        {
+          "group": "com.fasterxml.jackson.core",
+          "module": "jackson-databind"
+        },
+        {
+          "group": "com.fasterxml.jackson.datatype",
+          "module": "jackson-datatype-jsr310"
+        },
+        {
+          "group": "org.ow2.asm",
+          "module": "asm",
+          "version": {
+            "requires": "9.5"
+          }
+        },
+        {
+          "group": "com.google.cloud.tools",
+          "module": "jib-build-plan",
+          "version": {
+            "requires": "0.4.0"
+          }
+        },
+        {
+          "group": "com.google.cloud.tools",
+          "module": "jib-plugins-extension-common",
+          "version": {
+            "requires": "0.2.0"
+          }
+        },
+        {
+          "group": "com.google.cloud.tools",
+          "module": "jib-gradle-plugin-extension-api",
+          "version": {
+            "requires": "0.4.0"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "jib-gradle-plugin-3.4.3.jar",
+          "url": "jib-gradle-plugin-3.4.3.jar",
+          "size": 559718,
+          "sha512": "5885790821656a8ab72210adfab9886787e342549396e0470da9ab9b43f02a35148b398969ae8c0af5d2e3642c1070839146f2f141b1e0ce38ec2482ddb02e68",
+          "sha256": "0c5086578e13980186bbf75e1884edef636136208ecf1ded0b023a543c797209",
+          "sha1": "7d843d4cc054459f1044705dbdf0617c0cf9fc3e",
+          "md5": "0e48a676c2d3cfa400c2613f27e6f578"
+        }
+      ]
+    },
+    {
+      "name": "javadocElements",
+      "attributes": {
+        "org.gradle.category": "documentation",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.docstype": "javadoc",
+        "org.gradle.usage": "java-runtime"
+      },
+      "files": [
+        {
+          "name": "jib-gradle-plugin-3.4.3-javadoc.jar",
+          "url": "jib-gradle-plugin-3.4.3-javadoc.jar",
+          "size": 414840,
+          "sha512": "c0ee766f5cc578e41126321d3845a3b341087d5f6d2e66a6464a1dc99d9e3ce47adf12362a451a2f5e72fec50c2e0925f683be0dc8866647f4f5950d6b213499",
+          "sha256": "5738dfcf25a9014a95b47f442fc81ef8049308f6c55d0a5401602b31f33636c5",
+          "sha1": "9e125636c5bd09612564412151369a3318aaa374",
+          "md5": "c6f721c828296a05792751d3d181217a"
+        }
+      ]
+    },
+    {
+      "name": "sourcesElements",
+      "attributes": {
+        "org.gradle.category": "documentation",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.docstype": "sources",
+        "org.gradle.usage": "java-runtime"
+      },
+      "files": [
+        {
+          "name": "jib-gradle-plugin-3.4.3-sources.jar",
+          "url": "jib-gradle-plugin-3.4.3-sources.jar",
+          "size": 53035,
+          "sha512": "3cd04d984146b0f64fdc7b28bfb1fb3315b7a73f434d81ec5b339cbe04c93e4d2bdd4e18779e4b571045032d3ad0a2c73162a564c2f69cd6b9703d2c6f064be5",
+          "sha256": "a3c7ca9665877968cdd301d6512b3f1bb91023382f7ab12b868c947e6819673a",
+          "sha1": "2bb593addf13e36bb2b7c1444806cd753a07102b",
+          "md5": "78944f992c5c9237743f0c6a28e1c9a0"
+        }
+      ]
+    }
+  ]
+}
