@@ -377,6 +377,25 @@
     <groupId>org.jooq</groupId>
     <artifactId>jooq-codegen</artifactId>
     <version>3.19.10</version>
-</dependency>
-  </dependencies>
+  </dependency>
+</dependencies>
+<build>
+ <plugins>
+   <plugin>
+      <groupId>com.google.cloud.tools</groupId>
+      <artifactId>jib-maven-plugin</artifactId>
+      <version>3.4.3</version>
+   </plugin>
+   <plugin>
+      <groupId>com.google.cloud.tools</groupId>
+      <artifactId>jib-gradle-plugin</artifactId>
+      <version>3.4.3</version>
+   </plugin>
+   <plugin>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-gradle-plugin</artifactId>
+      <version>3.3.1</version>
+   </plugin>
+ </plugins>
+</build>
 </project>

@@ -16,10 +16,11 @@ plugins {
 
 repositories {
 	
-	maven { 
-		    url "http://nexus.kw01/repository/mvn-repos/" 
-		    allowInsecureProtocol true	
-		  }
+    mavenLocal()
+    maven {
+        url "http://175.126.202.210:9000/repository/maven-releases"
+        allowInsecureProtocol = true
+    }
     //mavenCentral(); gradlePluginPortal()
 }
 
@@ -67,6 +68,7 @@ dependencies {
 	implementation 'org.postgresql:postgresql:42.7.3'
 	implementation 'com.github.codemonstur:embedded-redis:1.4.3'
         implementation group: 'com.google.cloud.tools', name: 'jib-gradle-plugin', version: '3.4.1'
+        implementation group: 'org.jooq', name: 'jooq-meta-extensions', version: '3.19.10'
 
 	testImplementation "${packagePrefix}-starter-test"
 
@@ -129,3 +131,16 @@ bootJar {
 
 wrapper { gradleVersion = '8.5' }
 
+build {
+    finalizedBy 'cacheToMavenLocal'
+}
+
+task cacheToMavenLocal(type: Copy) {
+    from new File(gradle.gradleUserHomeDir, 'caches/modules-2/files-2.1')
+    into repositories.mavenLocal().url
+    eachFile {
+        List<String> parts = it.path.split('/')
+        it.path = [parts[0].replace('.','/'), parts[1], parts[2], parts[4]].join('/')
+    }
+    includeEmptyDirs false
+}

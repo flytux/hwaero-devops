@@ -1,1 +1,10 @@
+pluginManagement { 
+    repositories { 
+        maven { 
+                url "http://175.126.202.210:9000/repository/maven-releases" 
+                allowInsecureProtocol = true
+        }  
+
+    } 
+}
 rootProject.name='dough'
