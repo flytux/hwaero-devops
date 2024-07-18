@@ -1,5 +1,6 @@
 pluginManagement { 
     repositories { 
+        mavenLocal(); mavenCentral(); google(); gradlePluginPortal()
         maven { 
                 url "http://175.126.202.210:9000/repository/maven-releases" 
                 allowInsecureProtocol = true

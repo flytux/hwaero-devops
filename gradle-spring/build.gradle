@@ -4,43 +4,30 @@ buildscript {
 		packagePrefix = 'org.springframework.boot:spring-boot'
 	}
 }
-
 plugins {
 	id 'java'
 	id 'idea'
+	id 'maven-publish'
+	id 'com.google.cloud.tools.jib' version '3.4.3'
 	id 'org.springframework.boot' version "${bootVer}"
 	id 'org.jooq.jooq-codegen-gradle' version '3.19.10'
-	id 'com.google.cloud.tools.jib' version '3.4.3'
-        id 'maven-publish'
 }
-
 repositories {
-	
-    mavenLocal()
-    maven {
-        url "http://175.126.202.210:9000/repository/maven-releases"
-        allowInsecureProtocol = true
-    }
-    //mavenCentral(); gradlePluginPortal()
+	mavenLocal()
+	mavenCentral(); google(); gradlePluginPortal()
 }
-
-group = 'io.dough'
-version = '0.0.1'
-description = 'Spring Boot 3.x Template'
-
+project.group = 'io.dough'
+project.version = '0.0.1'
+project.description = 'Spring Boot 3.x Template'
 java.sourceCompatibility = 21
 java.targetCompatibility = 21
-
 configurations.configureEach { c ->
 	c.exclude([group: 'log4j'])
 	c.exclude([group: 'commons-logging'])
 	c.resolutionStrategy { rs -> rs.preferProjectModules() }
 }
-
 dependencies {
 	implementation platform("${packagePrefix}-dependencies:${bootVer}")
-	implementation platform('org.springframework.cloud:spring-cloud-dependencies:2023.0.2')
-
 	implementation "${packagePrefix}-starter-actuator"
 	implementation "${packagePrefix}-starter-aop"
 	implementation "${packagePrefix}-starter-cache"
@@ -49,67 +36,52 @@ dependencies {
 	implementation "${packagePrefix}-starter-security"
 	implementation "${packagePrefix}-starter-validation"
 	implementation "${packagePrefix}-starter-web"
-
 	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.5.0'
-	implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
-	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.3'
-
-	implementation 'org.jsoup:jsoup:1.17.2'
-	implementation 'org.codehaus.janino:janino:3.1.12'
-	implementation 'org.owasp:security-logging-logback:1.1.7'
-	implementation 'com.navercorp.lucy:lucy-xss-servlet:2.0.1'
-
-	implementation 'org.mapstruct:mapstruct:1.5.5.Final'
-	implementation 'org.apache.commons:commons-text:1.12.0'
-	implementation 'org.apache.commons:commons-pool2:2.12.0'
-	implementation 'com.github.ben-manes.caffeine:caffeine:3.1.8'
-
 	implementation 'com.h2database:h2:2.2.224'
 	implementation 'org.postgresql:postgresql:42.7.3'
-	implementation 'com.github.codemonstur:embedded-redis:1.4.3'
-        implementation group: 'com.google.cloud.tools', name: 'jib-gradle-plugin', version: '3.4.1'
-        implementation group: 'org.jooq', name: 'jooq-meta-extensions', version: '3.19.10'
-
+	implementation 'com.github.ben-manes.caffeine:caffeine:3.1.8'
+	implementation 'org.opensearch.client:opensearch-java:2.11.1'
+	implementation 'org.apache.httpcomponents.client5:httpclient5:5.3.1'
+	implementation 'io.jsonwebtoken:jjwt-api:0.12.6'
+	implementation 'io.jsonwebtoken:jjwt-impl:0.12.6'
+	implementation 'io.jsonwebtoken:jjwt-jackson:0.12.6'
+	implementation 'com.google.guava:guava:33.2.1-jre'
+	implementation 'org.mapstruct:mapstruct:1.5.5.Final'
+	implementation 'org.codehaus.janino:janino:3.1.12'
+	implementation 'org.apache.commons:commons-text:1.12.0'
+	implementation 'org.owasp:security-logging-logback:1.1.7'
+	implementation 'com.navercorp.lucy:lucy-xss-servlet:2.0.1'
 	testImplementation "${packagePrefix}-starter-test"
-
-	testImplementation 'com.github.fppt:jedis-mock:1.1.1'
-	testImplementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter-test:3.0.3'
-
+	jooqCodegen 'org.jooq:jooq-codegen:3.19.10'
+	jooqCodegen 'org.jooq:jooq-meta-extensions:3.19.10'
 	compileOnly 'org.projectlombok:lombok:1.18.32'
 	compileOnly 'org.projectlombok:lombok-mapstruct-binding:0.2.0'
-
 	annotationProcessor 'org.projectlombok:lombok:1.18.32'
 	annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.5.Final'
 	annotationProcessor 'org.projectlombok:lombok-mapstruct-binding:0.2.0'
 	annotationProcessor "${packagePrefix}-configuration-processor:${bootVer}"
-
 	testAnnotationProcessor 'org.mapstruct:mapstruct-processor:1.5.5.Final'
-
-	jooqCodegen 'org.jooq:jooq-codegen:3.19.10'
-	jooqCodegen 'org.jooq:jooq-meta-extensions:3.19.10'
+	implementation 'wsdl4j:wsdl4j:1.6.3'
+	implementation 'org.apache.axis:axis:1.4'
+	implementation 'commons-discovery:commons-discovery:0.5'
+	implementation 'javax.xml.rpc:javax.xml.rpc-api:1.1.2'
+	implementation 'javax.xml.soap:javax.xml.soap-api:1.4.0'
+	implementation fileTree(dir: "${projectDir}/libs", include: ['*.jar'])
 }
-
 jooq {
 	configuration {
 		generator {
 			database {
 				name = 'org.jooq.meta.extensions.ddl.DDLDatabase'
 				properties {
-					property {
-						key = 'sort'; value = 'semantic'
-					}
-					property {
-						key = 'defaultNameCase'; value = 'lower'
-					}
-					property {
-						key = 'scripts'; value = 'src/main/resources/db/schema.sql'
-					}
+					property { key = 'sort'; value = 'semantic' }
+					property { key = 'defaultNameCase'; value = 'lower' }
+					property { key = 'scripts'; value = 'src/main/resources/db/schema.sql' }
 				}
 			}
 		}
 	}
 }
-
 compileJava {
 	dependsOn(jooqCodegen)
 	inputs.files(processResources)
@@ -117,30 +89,22 @@ compileJava {
 	options.compilerArgs.add('-Amapstruct.defaultComponentModel=spring')
 	options.compilerArgs.add('-Amapstruct.suppressGeneratorTimestamp=true')
 }
-
 project.getTasks().register('cpExtraFiles', Copy) { c ->
 	c.from("${projectDir}/exec"); c.into(layout.buildDirectory.dir("libs"))
 }
-
 jar { enabled = false }
-
 bootJar {
 	dependsOn(cpExtraFiles)
 	archiveFileName = "${rootProject.name}.jar"
 }
-
 wrapper { gradleVersion = '8.5' }
-
-build {
-    finalizedBy 'cacheToMavenLocal'
-}
-
-task cacheToMavenLocal(type: Copy) {
-    from new File(gradle.gradleUserHomeDir, 'caches/modules-2/files-2.1')
-    into repositories.mavenLocal().url
-    eachFile {
-        List<String> parts = it.path.split('/')
-        it.path = [parts[0].replace('.','/'), parts[1], parts[2], parts[4]].join('/')
-    }
-    includeEmptyDirs false
+build { finalizedBy 'cacheToMavenLocal' }
+project.getTasks().register('cacheToMavenLocal', Copy) {
+	from("${gradle.gradleUserHomeDir}/caches/modules-2/files-2.1")
+	into(repositories.mavenLocal().url)
+	eachFile {
+		List<String> parts = it.path.split('/')
+		it.path = [parts[0].replace('.','/'), parts[1], parts[2], parts[4]].join('/')
+	}
+	includeEmptyDirs false
 }
