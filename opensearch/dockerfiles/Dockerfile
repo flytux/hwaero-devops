@@ -63,7 +63,7 @@ FROM nvidia/cuda:11.6.2-cudnn8-devel-ubi8
 ARG UID=1000
 ARG GID=1000
 ARG OPENSEARCH_HOME=/usr/share/opensearch
-ARG OS_VERSION=2.5.0
+ARG OS_VERSION=2.14.0
 
 RUN yum update -y && yum install -y tar gzip shadow-utils which && yum clean all
 
