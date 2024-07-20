@@ -10,7 +10,7 @@ replicas: 1
 
 extraEnvs: 
   - name: OPENSEARCH_INITIAL_ADMIN_PASSWORD
-    value: "9ijN0okM#$"
+    value: "password@1234"
 
 persistence:
   enabled: false
