@@ -1,0 +1,19 @@
+image:
+  repository: "kw/opensearch"
+
+roles:
+  - master
+  - data
+  - ml
+
+replicas: 1
+
+extraEnvs: 
+  - name: OPENSEARCH_INITIAL_ADMIN_PASSWORD
+    value: "9ijN0okM#$"
+
+persistence:
+  enabled: false
+
+nodeSelector:
+  nvidia.com/gpu.present: "true"
