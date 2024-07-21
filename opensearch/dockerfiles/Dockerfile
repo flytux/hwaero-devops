@@ -12,7 +12,7 @@
 
 
 ########################### Stage 0 ########################
-FROM amazonlinux:2 AS linux_stage_0
+FROM ubuntu:focal AS linux_stage_0
 
 ARG UID=1000
 ARG GID=1000
@@ -21,35 +21,28 @@ ARG OPENSEARCH_HOME=/usr/share/opensearch
 ARG OPENSEARCH_PATH_CONF=$OPENSEARCH_HOME/config
 ARG SECURITY_PLUGIN_DIR=$OPENSEARCH_HOME/plugins/opensearch-security
 ARG PERFORMANCE_ANALYZER_PLUGIN_CONFIG_DIR=$OPENSEARCH_PATH_CONF/opensearch-performance-analyzer
+ARG ARCH=x64
 ARG OS_VERSION=2.14.0
 # Update packages
 # Install the tools we need: tar and gzip to unpack the OpenSearch tarball, and shadow-utils to give us `groupadd` and `useradd`.
 # Install which to allow running of securityadmin.sh
-RUN yum update -y && yum install -y tar gzip shadow-utils which && yum clean all
+RUN apt update -y && apt install curl -y
 
 # Create an opensearch user, group, and directory
-RUN groupadd -g $GID opensearch && \
-    adduser -u $UID -g $GID -d $OPENSEARCH_HOME opensearch && \
+RUN groupadd --gid $GID opensearch && \
+    adduser --uid $UID --gid $GID --home $OPENSEARCH_HOME opensearch && \
     mkdir $TEMP_DIR
 
-RUN mkdir /usr/share/elasticsearch
+RUN mkdir /usr/share/elasticsearch 
+
 WORKDIR /usr/share/elasticsearch
 
-RUN set -eux ; \
-    cur_arch="" ; \
-    case "$(arch)" in \
-        aarch64) cur_arch='arm64' ;; \
-        x86_64)  cur_arch='x64' ;; \
-        *) echo >&2 ; echo >&2 "Unsupported architecture $(arch)" ; echo >&2 ; exit 1 ;; \
-    esac ; \
-    curl --retry 10 -S -L --output $TEMP_DIR/opensearch.tar.gz https://artifacts.opensearch.org/releases/bundle/opensearch/$OS_VERSION/opensearch-$OS_VERSION-linux-$cur_arch.tar.gz; \
-    curl --output $TEMP_DIR/opensearch.pgp https://artifacts.opensearch.org/publickeys/opensearch.pgp; \
-    gpg --import $TEMP_DIR/opensearch.pgp; \
-    curl --output $TEMP_DIR/opensearch.tar.gz.sig https://artifacts.opensearch.org/releases/bundle/opensearch/$OS_VERSION/opensearch-$OS_VERSION-linux-$cur_arch.tar.gz.sig; \
-    gpg --verify $TEMP_DIR/opensearch.tar.gz.sig $TEMP_DIR/opensearch.tar.gz;
 
-RUN tar --warning=no-timestamp -zxf $TEMP_DIR/opensearch.tar.gz -C $OPENSEARCH_HOME --strip-components=1 && \
-    mkdir -p $OPENSEARCH_HOME/data && chown -Rv $UID:$GID $OPENSEARCH_HOME/data && \
+RUN curl -LO https://artifacts.opensearch.org/releases/bundle/opensearch/$OS_VERSION/opensearch-$OS_VERSION-linux-$ARCH.tar.gz
+
+RUN tar xvf opensearch-$OS_VERSION-linux-$ARCH.tar.gz -C /usr/share/opensearch --strip-components=1
+
+RUN mkdir -p $OPENSEARCH_HOME/data && chown -Rv $UID:$GID $OPENSEARCH_HOME/data && \
     if [[ -d $SECURITY_PLUGIN_DIR ]] ; then chmod -v 750 $SECURITY_PLUGIN_DIR/tools/* ; fi && \
     rm -rf $TEMP_DIR
 
@@ -58,18 +51,17 @@ COPY bin/* $OPENSEARCH_HOME/
 RUN if [[ -d $PERFORMANCE_ANALYZER_PLUGIN_CONFIG_DIR ]] ; then mv $OPENSEARCH_PATH_CONF/performance-analyzer.properties $PERFORMANCE_ANALYZER_PLUGIN_CONFIG_DIR/ ; fi
 ########################### Stage 1 ########################
 # Copy working directory to the actual release docker images
-FROM nvidia/cuda:11.5.2-devel-ubi7
+FROM nvidia/cuda:12.5.1-cudnn-devel-ubuntu20.04
 
 ARG UID=1000
 ARG GID=1000
 ARG OPENSEARCH_HOME=/usr/share/opensearch
 ARG OS_VERSION=2.14.0
 
-RUN yum update -y && yum install -y tar gzip shadow-utils which && yum clean all
-
 # Create an opensearch user, group
-RUN groupadd -g $GID opensearch && \
-    adduser -u $UID -g $GID -d $OPENSEARCH_HOME opensearch
+RUN apt update -y && apt install vim -y
+
+RUN groupadd --gid $GID opensearch && adduser --uid $UID --gid $GID --home $OPENSEARCH_HOME opensearch 
 
 # Copy from Stage0
 COPY --from=linux_stage_0 --chown=$UID:$GID $OPENSEARCH_HOME $OPENSEARCH_HOME

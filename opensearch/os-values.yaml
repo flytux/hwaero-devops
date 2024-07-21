@@ -1,5 +1,5 @@
 image:
-  repository: "opensearch-cuda"
+  repository: "opensearch-cuda-focal"
 
 roles:
   - master
