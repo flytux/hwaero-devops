@@ -58,7 +58,7 @@ COPY bin/* $OPENSEARCH_HOME/
 RUN if [[ -d $PERFORMANCE_ANALYZER_PLUGIN_CONFIG_DIR ]] ; then mv $OPENSEARCH_PATH_CONF/performance-analyzer.properties $PERFORMANCE_ANALYZER_PLUGIN_CONFIG_DIR/ ; fi
 ########################### Stage 1 ########################
 # Copy working directory to the actual release docker images
-FROM nvidia/cuda:11.6.2-cudnn8-devel-ubi8
+FROM nvidia/cuda:11.5.2-devel-ubi7
 
 ARG UID=1000
 ARG GID=1000

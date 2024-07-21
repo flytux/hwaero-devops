@@ -1,5 +1,5 @@
 image:
-  repository: "opensearch"
+  repository: "opensearch-cuda"
 
 roles:
   - master
@@ -10,10 +10,10 @@ replicas: 1
 
 extraEnvs: 
   - name: OPENSEARCH_INITIAL_ADMIN_PASSWORD
-    value: "password@1234"
+    value: "9ijn0okM#$"
 
 persistence:
   enabled: false
 
-nodeSelector:
-  nvidia.com/gpu.present: "true"
+#nodeSelector:
+#  nvidia.com/gpu.present: "true"
