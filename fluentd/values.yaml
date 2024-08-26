@@ -1,0 +1,134 @@
+variant: opensearch
+
+plugins: 
+  - fluent-plugin-s3
+  - fluent-plugin-opensearch
+
+fileConfigs:
+  01_sources.conf: |-
+    ## logs from podman
+    <system>
+      log_level debug
+    </system>
+    <source>
+      @type tail
+      @id in_tail_container_logs
+      @label @LLM
+      path /var/log/containers/ct*.log
+      pos_file /var/log/app-llm-dev-v2.log.pos
+      tag llm.*
+      read_from_head true
+      <parse>
+        @type multi_format
+        <pattern>
+          format regexp
+          expression /^(?<TIME>[^\s]*)\s(?<STREAM>stdout|stderr)\s+(?<FILTER>.)\s\[(?<TYPE>[a-zA-Z]*-[a-zA-Z]*)\](?<LOG>.*)\s/
+          time_format '%Y-%m-%dT%H:%M:%S.%NZ'
+          keep_time_key true
+        </pattern>
+        <pattern>
+          format regexp
+          expression /^(?<TIME>[^\s]*)\s(?<STREAM>stdout|stderr)\s(?<FILTER>.)\s(?<LOG>.*)/
+          time_format '%Y-%m-%dT%H:%M:%S.%NZ'
+          keep_time_key true
+        </pattern>
+      </parse>
+      emit_unmatched_lines true
+    </source>
+
+    # expose metrics in prometheus format
+    <source>
+      @type prometheus
+      bind 0.0.0.0
+      port 24231
+      metrics_path /metrics
+    </source>
+
+  02_filters.conf: |-
+    <label @LLM>
+      <match llm.var.log.containers.fluentd**>
+        @type relabel
+        @label @FLUENT_LOG
+      </match>
+
+      # <match kubernetes.var.log.containers.**_kube-system_**>
+      #   @type null
+      #   @id ignore_kube_system_logs
+      # </match>
+
+      <filter llm.**>
+        @type kubernetes_metadata
+        @id filter_kube_metadata
+        skip_labels false
+        skip_container_metadata false
+        skip_namespace_metadata true
+        skip_master_url true
+      </filter>
+
+      <match **>
+        @type relabel
+        @label @DISPATCH
+      </match>
+    </label>
+
+  03_dispatch.conf: |-
+    <label @DISPATCH>
+      <filter **>
+        @type prometheus
+        <metric>
+          name fluentd_input_status_num_records_total
+          type counter
+          desc The total number of incoming records
+          <labels>
+            tag ${tag}
+            hostname ${hostname}
+          </labels>
+        </metric>
+      </filter>
+
+      <match **>
+        @type relabel
+        @label @OUTPUT
+      </match>
+    </label>
+
+  04_outputs.conf: |-
+    <label @OUTPUT>
+      <match **>
+      @type copy
+      <store>
+        @type stdout
+      </store>
+      <store>
+        @type opensearch
+        host opensearch.opensearch
+        port 9200
+        index_name app-llm-dev
+      </store>
+      <store>
+        @type s3
+        aws_key_id minio
+        aws_sec_key minio123
+        s3_bucket llm-dev-log-v2
+        s3_region us-east-1
+        s3_endpoint http://minio.minio:9000/
+        force_path_style true
+        s3_object_key_format "logs/%{time_slice}-events_%{index}.%{file_extension}"
+        time_slice_format %Y/%m/%d/%H
+        <buffer tag,time>
+         @type file
+         path /var/log/fluent/s3
+         timekey 1m
+         timekey_wait 10s
+        </buffer>
+      </store>
+      </match>
+    </label>
+
+ingress:
+  enabled: true
+  annotations: 
+    kubernetes.io/ingress.class: nginx
+  hosts:
+    - host: fluentd.kw01
+      port: 9880
