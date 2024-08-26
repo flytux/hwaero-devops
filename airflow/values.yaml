@@ -1,0 +1,12 @@
+ingress:
+  web:
+    enabled: true
+    host: "airflow.kw01"
+    ingressClassName: "nginx"
+
+dags:
+  persistence:
+    enabled: true
+    size: 1Gi
+    storageClassName: nfs-csi
+    accessMode: ReadWriteMany

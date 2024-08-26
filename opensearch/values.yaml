@@ -1,0 +1,30 @@
+security:
+  enabled: false
+master:
+  masterOnly: false
+  replicaCount: 1
+  extraRoles: 
+    - data
+    - ingest
+  persistence:
+    enabled: true
+    storageClass: "nfs-csi"
+    accessModes:
+      - ReadWriteOnce
+    size: 8Gi
+  networkPolicy:
+    enabled: false
+data:
+  replicaCount: 0
+coordinating:
+  replicaCount: 0
+ingest:
+  enabled: false
+dashboards:
+  enabled: true
+  ingress:
+    enabled: true
+    pathType: ImplementationSpecific
+    hostname: opensearch.kw01
+    path: /
+    ingressClassName: "nginx"

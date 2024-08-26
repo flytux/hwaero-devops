@@ -1,0 +1,24 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: executor
+rules:
+  - apiGroups:
+      - argoproj.io
+    resources:
+      - workflowtaskresults
+    verbs:
+      - create
+      - patch
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: executor
+subjects:
+# You can specify more than one "subject"
+- kind: ServiceAccount
+  name: default # "name" is case sensitive
+roleRef:
+  kind: Role #this must be Role or ClusterRole
+  name: executor # this must match the name of the Role or ClusterRole you wish to bind to
